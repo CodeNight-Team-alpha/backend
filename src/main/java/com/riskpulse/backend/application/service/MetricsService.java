@@ -5,6 +5,7 @@ import com.riskpulse.backend.persistence.entity.UserStateEntity;
 import com.riskpulse.backend.persistence.projection.UserStateMetricsProjection;
 import com.riskpulse.backend.persistence.repository.UserStateMetricsRepository;
 import com.riskpulse.backend.persistence.repository.UserStateRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,16 +13,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MetricsService {
 
     private final UserStateMetricsRepository metricsRepository;
     private final UserStateRepository userStateRepository;
-
-    public MetricsService(UserStateMetricsRepository metricsRepository,
-                          UserStateRepository userStateRepository) {
-        this.metricsRepository = metricsRepository;
-        this.userStateRepository = userStateRepository;
-    }
 
     @Transactional
     public int computeAndUpsertUserState(LocalDate asOfDate) {

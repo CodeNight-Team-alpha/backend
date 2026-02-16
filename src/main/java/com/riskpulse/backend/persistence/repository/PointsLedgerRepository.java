@@ -17,6 +17,6 @@ public interface PointsLedgerRepository extends JpaRepository<PointsLedgerEntity
     @Query("SELECT COALESCE(SUM(p.pointsDelta), 0) FROM PointsLedgerEntity p WHERE p.userId = :userId")
     BigDecimal sumPointsByUserId(@Param("userId") String userId);
 
-    @Query("SELECT p.userId AS userId, SUM(p.pointsDelta) AS totalPoints FROM PointsLedgerEntity p WHERE p.createdAt <= :endOfDay GROUP BY p.userId ORDER BY SUM(p.pointsDelta) DESC")
+    @Query("SELECT p.userId AS userId, SUM(p.pointsDelta) AS totalPoints FROM PointsLedgerEntity p WHERE p.createdAt <= :endOfDay GROUP BY p.userId ORDER BY SUM(p.pointsDelta) DESC, p.userId ASC")
     List<UserPointsProjection> findTotalPointsByUserAsOf(@Param("endOfDay") OffsetDateTime endOfDay);
 }

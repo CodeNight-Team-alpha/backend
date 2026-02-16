@@ -5,6 +5,7 @@ import com.riskpulse.backend.persistence.entity.PointsLedgerEntity;
 import com.riskpulse.backend.persistence.repository.ChallengeAwardRepository;
 import com.riskpulse.backend.persistence.repository.PointsLedgerRepository;
 import com.riskpulse.backend.persistence.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PointsLedgerService {
 
     private static final Logger log = LoggerFactory.getLogger(PointsLedgerService.class);
@@ -24,14 +26,6 @@ public class PointsLedgerService {
     private final ChallengeAwardRepository challengeAwardRepository;
     private final PointsLedgerRepository pointsLedgerRepository;
     private final UserRepository userRepository;
-
-    public PointsLedgerService(ChallengeAwardRepository challengeAwardRepository,
-                               PointsLedgerRepository pointsLedgerRepository,
-                               UserRepository userRepository) {
-        this.challengeAwardRepository = challengeAwardRepository;
-        this.pointsLedgerRepository = pointsLedgerRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public AppendResult appendChallengePoints(LocalDate asOfDate) {

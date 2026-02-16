@@ -4,6 +4,7 @@ import com.riskpulse.backend.persistence.entity.ChallengeAwardEntity;
 import com.riskpulse.backend.persistence.entity.NotificationEntity;
 import com.riskpulse.backend.persistence.repository.ChallengeAwardRepository;
 import com.riskpulse.backend.persistence.repository.NotificationRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.Map;
  * Challenge ödülü verildiğinde kullanıcıya bildirim üretir (FR-15). Idempotent: (user_id, source_ref) unique.
  */
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
@@ -32,12 +34,6 @@ public class NotificationService {
 
     private final ChallengeAwardRepository challengeAwardRepository;
     private final NotificationRepository notificationRepository;
-
-    public NotificationService(ChallengeAwardRepository challengeAwardRepository,
-                               NotificationRepository notificationRepository) {
-        this.challengeAwardRepository = challengeAwardRepository;
-        this.notificationRepository = notificationRepository;
-    }
 
     @Transactional
     public int generateNotifications(LocalDate asOfDate) {
@@ -55,6 +51,7 @@ public class NotificationService {
                     .userId(userId)
                     .sourceRef(sourceRef)
                     .message(message)
+                    .completedAt(award.getAsOfDate())
                     .createdAt(OffsetDateTime.now())
                     .build();
             notificationRepository.save(notification);

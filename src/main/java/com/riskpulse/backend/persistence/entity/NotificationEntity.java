@@ -3,6 +3,7 @@ package com.riskpulse.backend.persistence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -27,6 +28,10 @@ public class NotificationEntity {
 
     @Column(name = "message", columnDefinition = "TEXT")
     private String message;
+
+    /** Tarih gösterimi için: challenge'ın tamamlandığı gün (as_of_date). */
+    @Column(name = "completed_at")
+    private LocalDate completedAt;
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;

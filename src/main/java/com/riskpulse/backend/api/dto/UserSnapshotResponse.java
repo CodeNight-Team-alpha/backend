@@ -39,5 +39,5 @@ public record UserSnapshotResponse(
     public record BadgeDto(String badgeId, String badgeName, Integer threshold) {}
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public record NotificationDto(Long id, String sourceRef, String message, String createdAt) {}
+    public record NotificationDto(Long id, String sourceRef, String message, String completedAt, String createdAt) {}
 }

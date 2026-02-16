@@ -10,6 +10,7 @@ import com.riskpulse.backend.persistence.repository.BadgeAwardRepository;
 import com.riskpulse.backend.persistence.repository.BadgeRepository;
 import com.riskpulse.backend.persistence.repository.PointsLedgerRepository;
 import com.riskpulse.backend.persistence.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BadgeService {
 
     private static final Logger log = LoggerFactory.getLogger(BadgeService.class);
@@ -30,16 +32,6 @@ public class BadgeService {
     private final BadgeRepository badgeRepository;
     private final BadgeAwardRepository badgeAwardRepository;
     private final UserRepository userRepository;
-
-    public BadgeService(PointsLedgerRepository pointsLedgerRepository,
-                        BadgeRepository badgeRepository,
-                        BadgeAwardRepository badgeAwardRepository,
-                        UserRepository userRepository) {
-        this.pointsLedgerRepository = pointsLedgerRepository;
-        this.badgeRepository = badgeRepository;
-        this.badgeAwardRepository = badgeAwardRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public AwardResult evaluateAndAwardBadges(LocalDate asOfDate) {

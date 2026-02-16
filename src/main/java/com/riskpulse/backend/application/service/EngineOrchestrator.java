@@ -1,6 +1,7 @@
 package com.riskpulse.backend.application.service;
 
 import com.riskpulse.backend.persistence.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Optional;
  * Application-layer orchestrator: runs engine steps in order and resolves asOfDate.
  */
 @Service
+@RequiredArgsConstructor
 public class EngineOrchestrator {
 
     private static final Logger log = LoggerFactory.getLogger(EngineOrchestrator.class);
@@ -24,22 +26,6 @@ public class EngineOrchestrator {
     private final BadgeService badgeService;
     private final LeaderboardService leaderboardService;
     private final NotificationService notificationService;
-
-    public EngineOrchestrator(TransactionRepository transactionRepository,
-                              MetricsService metricsService,
-                              ChallengeAwardService challengeAwardService,
-                              PointsLedgerService pointsLedgerService,
-                              BadgeService badgeService,
-                              LeaderboardService leaderboardService,
-                              NotificationService notificationService) {
-        this.transactionRepository = transactionRepository;
-        this.metricsService = metricsService;
-        this.challengeAwardService = challengeAwardService;
-        this.pointsLedgerService = pointsLedgerService;
-        this.badgeService = badgeService;
-        this.leaderboardService = leaderboardService;
-        this.notificationService = notificationService;
-    }
 
     /**
      * Resolves asOfDate: if null, uses MAX(transaction_date) from DB; if still null, uses today.

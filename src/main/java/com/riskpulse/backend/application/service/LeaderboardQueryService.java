@@ -9,6 +9,7 @@ import com.riskpulse.backend.persistence.repository.BadgeAwardRepository;
 import com.riskpulse.backend.persistence.repository.BadgeRepository;
 import com.riskpulse.backend.persistence.repository.LeaderboardRepository;
 import com.riskpulse.backend.persistence.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,22 +22,13 @@ import java.util.stream.Collectors;
  * Application service: loads leaderboard from repo and uses mapper to build DTO.
  */
 @Service
+@RequiredArgsConstructor
 public class LeaderboardQueryService {
 
     private final LeaderboardRepository leaderboardRepository;
     private final TransactionRepository transactionRepository;
     private final BadgeAwardRepository badgeAwardRepository;
     private final BadgeRepository badgeRepository;
-
-    public LeaderboardQueryService(LeaderboardRepository leaderboardRepository,
-                                   TransactionRepository transactionRepository,
-                                   BadgeAwardRepository badgeAwardRepository,
-                                   BadgeRepository badgeRepository) {
-        this.leaderboardRepository = leaderboardRepository;
-        this.transactionRepository = transactionRepository;
-        this.badgeAwardRepository = badgeAwardRepository;
-        this.badgeRepository = badgeRepository;
-    }
 
     public LeaderboardResponse getLeaderboard(LocalDate asOfDate) {
         LocalDate date = asOfDate != null ? asOfDate : transactionRepository.findMaxTransactionDate().orElse(LocalDate.now());

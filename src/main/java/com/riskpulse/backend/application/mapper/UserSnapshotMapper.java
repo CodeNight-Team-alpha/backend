@@ -66,6 +66,7 @@ public final class UserSnapshotMapper {
                         n.getId(),
                         n.getSourceRef(),
                         n.getMessage(),
+                        NotificationMapper.resolveCompletedAt(n),
                         n.getCreatedAt() != null ? n.getCreatedAt().format(ISO) : null))
                 .toList();
 

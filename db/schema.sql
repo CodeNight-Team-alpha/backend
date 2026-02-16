@@ -103,11 +103,12 @@ CREATE TABLE IF NOT EXISTS badge_awards (
 
 -- 11) notifications (idempotent per user + source_ref)
 CREATE TABLE IF NOT EXISTS notifications (
-    id         BIGSERIAL PRIMARY KEY,
-    user_id    VARCHAR(50) NOT NULL REFERENCES users(user_id),
-    source_ref VARCHAR(50) NOT NULL,
-    message    TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    id          BIGSERIAL PRIMARY KEY,
+    user_id     VARCHAR(50) NOT NULL REFERENCES users(user_id),
+    source_ref  VARCHAR(50) NOT NULL,
+    message     TEXT,
+    completed_at DATE,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE (user_id, source_ref)
 );
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications (user_id);

@@ -10,6 +10,7 @@ import com.riskpulse.backend.persistence.entity.UserStateEntity;
 import com.riskpulse.backend.persistence.repository.ChallengeAwardRepository;
 import com.riskpulse.backend.persistence.repository.ChallengeRepository;
 import com.riskpulse.backend.persistence.repository.UserStateRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengeAwardService {
 
     private static final Logger log = LoggerFactory.getLogger(ChallengeAwardService.class);
@@ -28,14 +30,6 @@ public class ChallengeAwardService {
     private final UserStateRepository userStateRepository;
     private final ChallengeRepository challengeRepository;
     private final ChallengeAwardRepository challengeAwardRepository;
-
-    public ChallengeAwardService(UserStateRepository userStateRepository,
-                                 ChallengeRepository challengeRepository,
-                                 ChallengeAwardRepository challengeAwardRepository) {
-        this.userStateRepository = userStateRepository;
-        this.challengeRepository = challengeRepository;
-        this.challengeAwardRepository = challengeAwardRepository;
-    }
 
     @Transactional
     public int evaluateAndUpsertAwards(LocalDate asOfDate) {

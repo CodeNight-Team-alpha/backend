@@ -8,6 +8,7 @@ import com.riskpulse.backend.persistence.entity.LeaderboardId;
 import com.riskpulse.backend.persistence.projection.UserPointsProjection;
 import com.riskpulse.backend.persistence.repository.LeaderboardRepository;
 import com.riskpulse.backend.persistence.repository.PointsLedgerRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LeaderboardService {
 
     private static final Logger log = LoggerFactory.getLogger(LeaderboardService.class);
 
     private final PointsLedgerRepository pointsLedgerRepository;
     private final LeaderboardRepository leaderboardRepository;
-
-    public LeaderboardService(PointsLedgerRepository pointsLedgerRepository,
-                              LeaderboardRepository leaderboardRepository) {
-        this.pointsLedgerRepository = pointsLedgerRepository;
-        this.leaderboardRepository = leaderboardRepository;
-    }
 
     @Transactional
     public int computeAndUpsertLeaderboard(LocalDate asOfDate) {
