@@ -2,6 +2,7 @@ package com.riskpulse.backend.api.controller;
 
 import com.riskpulse.backend.api.dto.EngineRunResponse;
 import com.riskpulse.backend.application.service.EngineOrchestrator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,10 @@ import java.time.LocalDate;
  */
 @RestController
 @RequestMapping("/api/v1/admin/engine")
+@RequiredArgsConstructor
 public class AdminEngineController {
 
     private final EngineOrchestrator engineOrchestrator;
-
-    public AdminEngineController(EngineOrchestrator engineOrchestrator) {
-        this.engineOrchestrator = engineOrchestrator;
-    }
 
     @PostMapping("/run")
     public ResponseEntity<EngineRunResponse> run(

@@ -10,14 +10,15 @@ import java.util.List;
 
 /**
  * Deterministic challenge evaluator. No Spring/JPA.
- * Rules (by challenge_id): C-01 spend_today>=200, C-02 spend_7d>=3000,
- * C-03 unique_categories_today>=3, C-04 electronics_spend_today>=200.
- * Selected = triggered with smallest priority; others suppressed.
+ * Kurallar (tabloya göre): C-01 spend_today>=200, C-02 unique_categories_today>=3,
+ * C-03 electronics_spend_today>=300, C-04 spend_7d>=1500.
+ * Seçilen = tetiklenenler arasında en yüksek öncelikli (priority en küçük).
  */
 public final class ChallengeEngine {
 
     private static final BigDecimal THRESHOLD_200 = new BigDecimal("200");
-    private static final BigDecimal THRESHOLD_3000 = new BigDecimal("3000");
+    private static final BigDecimal THRESHOLD_300 = new BigDecimal("300");
+    private static final BigDecimal THRESHOLD_1500 = new BigDecimal("1500");
     private static final int THRESHOLD_CATEGORIES = 3;
 
     public static ChallengeDecision evaluate(UserState state, List<ChallengeRule> challengesOrderedByPriority) {
@@ -54,14 +55,14 @@ public final class ChallengeEngine {
 
     private static boolean passes(UserState state, String challengeId) {
         switch (challengeId) {
-            case "C-01":
+            case "C-01": // Günlük Harcama: spend_today >= 200
                 return state.getSpendToday() != null && state.getSpendToday().compareTo(THRESHOLD_200) >= 0;
-            case "C-02":
-                return state.getSpend7d() != null && state.getSpend7d().compareTo(THRESHOLD_3000) >= 0;
-            case "C-03":
+            case "C-02": // Kategori Avcısı: unique_categories_today >= 3
                 return state.getUniqueCategoriesToday() >= THRESHOLD_CATEGORIES;
-            case "C-04":
-                return state.getElectronicsSpendToday() != null && state.getElectronicsSpendToday().compareTo(THRESHOLD_200) >= 0;
+            case "C-03": // Elektronik Bonus: electronics_spend_today >= 300
+                return state.getElectronicsSpendToday() != null && state.getElectronicsSpendToday().compareTo(THRESHOLD_300) >= 0;
+            case "C-04": // Haftalık Aktif: spend_7d >= 1500
+                return state.getSpend7d() != null && state.getSpend7d().compareTo(THRESHOLD_1500) >= 0;
             default:
                 return false;
         }

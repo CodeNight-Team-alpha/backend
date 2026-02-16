@@ -1,5 +1,6 @@
 package com.riskpulse.backend.application.service;
 
+import com.riskpulse.backend.api.dto.ChallengeAwardDetailDto;
 import com.riskpulse.backend.api.dto.UserSnapshotResponse;
 import com.riskpulse.backend.application.mapper.UserSnapshotMapper;
 import com.riskpulse.backend.persistence.entity.*;
@@ -65,5 +66,13 @@ public class UserSnapshotQueryService {
                 badgeAwards,
                 badges,
                 notifications);
+    }
+
+    /** Kullanıcının tüm challenge ödüllerini (tetiklenen / seçilen / bastırılan) tarih sırasıyla döner. */
+    public List<ChallengeAwardDetailDto> getChallengeAwards(String userId) {
+        List<ChallengeAwardEntity> awards = challengeAwardRepository.findByUserIdOrderByAsOfDateDesc(userId);
+        return awards.stream()
+                .map(UserSnapshotMapper::toChallengeAwardDetailDto)
+                .toList();
     }
 }

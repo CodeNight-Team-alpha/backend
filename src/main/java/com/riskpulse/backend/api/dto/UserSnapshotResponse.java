@@ -27,7 +27,9 @@ public record UserSnapshotResponse(
     public record ChallengeDto(
             String awardId,
             String challengeId,
-            Integer rewardPoints
+            Integer rewardPoints,
+            java.util.List<String> triggeredChallengeIds,
+            java.util.List<String> suppressedChallengeIds
     ) {}
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -12,4 +12,6 @@ public interface ChallengeAwardRepository extends JpaRepository<ChallengeAwardEn
     Optional<ChallengeAwardEntity> findByUserIdAndAsOfDate(String userId, LocalDate asOfDate);
 
     List<ChallengeAwardEntity> findByAsOfDate(LocalDate asOfDate);
+
+    List<ChallengeAwardEntity> findByUserIdOrderByAsOfDateDesc(String userId);
 }

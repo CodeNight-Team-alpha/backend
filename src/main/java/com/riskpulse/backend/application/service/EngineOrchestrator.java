@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -61,6 +62,22 @@ public class EngineOrchestrator {
         runBadges(date);
         runLeaderboard(date);
         runNotifications(date);
+    }
+
+    /**
+     * Kullanıcının işlem yaptığı tüm günler için motoru çalıştırır (metrics → challenges → points → badges → leaderboard → notifications).
+     * Böylece her transaction_date için challenge ödülü ve puan üretilir.
+     */
+    public void runAllForAllTransactionDates() {
+        List<LocalDate> dates = transactionRepository.findDistinctTransactionDatesAsc();
+        if (dates.isEmpty()) {
+            log.debug("no transaction dates to process");
+            return;
+        }
+        log.info("running engine for {} transaction date(s): {} ... {}", dates.size(), dates.get(0), dates.get(dates.size() - 1));
+        for (LocalDate d : dates) {
+            runAll(d);
+        }
     }
 
     public void runMetrics(LocalDate asOfDate) {

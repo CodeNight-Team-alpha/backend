@@ -14,4 +14,8 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
 
     @Query("SELECT MAX(t.transactionDate) FROM TransactionEntity t")
     Optional<LocalDate> findMaxTransactionDate();
+
+    /** Tüm işlem günlerini (distinct transaction_date) tarih sırasına göre döner. Challenge motorunun her gün için çalışması için kullanılır. */
+    @Query("SELECT DISTINCT t.transactionDate FROM TransactionEntity t ORDER BY t.transactionDate")
+    List<LocalDate> findDistinctTransactionDatesAsc();
 }

@@ -1,8 +1,6 @@
 package com.riskpulse.backend.application.runner;
 
-import com.riskpulse.backend.application.service.BadgeService;
-import com.riskpulse.backend.application.service.ChallengeAwardService;
-import com.riskpulse.backend.application.service.MetricsService;
+import com.riskpulse.backend.application.service.EngineOrchestrator;
 import com.riskpulse.backend.application.service.PointsLedgerService;
 import com.riskpulse.backend.persistence.entity.TransactionEntity;
 import com.riskpulse.backend.persistence.repository.MerchantRepository;
@@ -24,25 +22,19 @@ public class DbSanityCheck implements ApplicationRunner {
     private final UserRepository userRepository;
     private final MerchantRepository merchantRepository;
     private final TransactionRepository transactionRepository;
-    private final MetricsService metricsService;
-    private final ChallengeAwardService challengeAwardService;
+    private final EngineOrchestrator engineOrchestrator;
     private final PointsLedgerService pointsLedgerService;
-    private final BadgeService badgeService;
 
     public DbSanityCheck(UserRepository userRepository,
                          MerchantRepository merchantRepository,
                          TransactionRepository transactionRepository,
-                         MetricsService metricsService,
-                         ChallengeAwardService challengeAwardService,
-                         PointsLedgerService pointsLedgerService,
-                         BadgeService badgeService) {
+                         EngineOrchestrator engineOrchestrator,
+                         PointsLedgerService pointsLedgerService) {
         this.userRepository = userRepository;
         this.merchantRepository = merchantRepository;
         this.transactionRepository = transactionRepository;
-        this.metricsService = metricsService;
-        this.challengeAwardService = challengeAwardService;
+        this.engineOrchestrator = engineOrchestrator;
         this.pointsLedgerService = pointsLedgerService;
-        this.badgeService = badgeService;
     }
 
     @Override
@@ -58,14 +50,8 @@ public class DbSanityCheck implements ApplicationRunner {
             log.info("Sample transaction: id={}, date={}", t.getTransactionId(), t.getTransactionDate());
         }
 
-        transactionRepository.findMaxTransactionDate().ifPresent(maxDate -> {
-            int rows = metricsService.computeAndUpsertUserState(maxDate);
-            log.info("user_state upsert done for asOfDate={} rows={}", maxDate, rows);
-            int awardRows = challengeAwardService.evaluateAndUpsertAwards(maxDate);
-            log.info("challenge_awards upsert done for asOfDate={} rows={}", maxDate, awardRows);
-            pointsLedgerService.appendChallengePoints(maxDate);
-            pointsLedgerService.logTotalPointsByUser();
-            badgeService.evaluateAndAwardBadges(maxDate);
-        });
+        // Kullanıcının işlem yaptığı tüm günler için motoru çalıştır (her gün için challenge + puan üretimi)
+        engineOrchestrator.runAllForAllTransactionDates();
+        pointsLedgerService.logTotalPointsByUser();
     }
 }

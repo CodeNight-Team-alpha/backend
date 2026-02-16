@@ -1,13 +1,16 @@
 package com.riskpulse.backend.application.mapper;
 
+import com.riskpulse.backend.api.dto.ChallengeAwardDetailDto;
 import com.riskpulse.backend.api.dto.UserSnapshotResponse;
 import com.riskpulse.backend.persistence.entity.*;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Maps persistence entities to UserSnapshotResponse DTO.
@@ -40,7 +43,9 @@ public final class UserSnapshotMapper {
                 .map(a -> new UserSnapshotResponse.ChallengeDto(
                         a.getAwardId(),
                         a.getChallengeId(),
-                        a.getRewardPoints()))
+                        a.getRewardPoints(),
+                        parseChallengeIdList(a.getTriggeredChallenges()),
+                        parseChallengeIdList(a.getSuppressedChallenges())))
                 .orElse(null);
 
         UserSnapshotResponse.PointsDto points = new UserSnapshotResponse.PointsDto(
@@ -72,5 +77,30 @@ public final class UserSnapshotMapper {
                 points,
                 badgeDtos,
                 notifDtos);
+    }
+
+    /** Parses stored JSON array string e.g. ["C-04","C-03"] to list of challenge ids. */
+    static List<String> parseChallengeIdList(String json) {
+        if (json == null || json.isBlank() || "[]".equals(json.trim())) {
+            return List.of();
+        }
+        String inner = json.replace("[", "").replace("]", "").replace("\"", "").trim();
+        if (inner.isEmpty()) return List.of();
+        return Arrays.stream(inner.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    public static ChallengeAwardDetailDto toChallengeAwardDetailDto(ChallengeAwardEntity a) {
+        if (a == null) return null;
+        return new ChallengeAwardDetailDto(
+                a.getAwardId(),
+                a.getAsOfDate() != null ? a.getAsOfDate().toString() : null,
+                parseChallengeIdList(a.getTriggeredChallenges()),
+                a.getSelectedChallenge() != null ? a.getSelectedChallenge() : a.getChallengeId(),
+                parseChallengeIdList(a.getSuppressedChallenges()),
+                a.getRewardPoints()
+        );
     }
 }

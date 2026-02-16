@@ -1,13 +1,16 @@
 -- Cashback Battle Arena — Seed: challenges + badges (idempotent)
 
--- Challenges (4 rows: C-01..C-04)
+-- Challenges (4 rows: C-01..C-04 — tablodaki kurallara göre)
 INSERT INTO challenges (challenge_id, name, reward_points, priority, is_active)
 VALUES
-    ('C-01', 'Daily Spender', 10, 1, true),
-    ('C-02', 'Category Explorer', 15, 2, true),
-    ('C-03', 'Electronics Fan', 20, 3, true),
-    ('C-04', 'Week Warrior', 25, 4, true)
-ON CONFLICT (challenge_id) DO NOTHING;
+    ('C-01', 'Günlük Harcama', 60, 5, true),
+    ('C-02', 'Kategori Avcısı', 120, 3, true),
+    ('C-03', 'Elektronik Bonus', 180, 2, true),
+    ('C-04', 'Haftalık Aktif', 220, 1, true)
+ON CONFLICT (challenge_id) DO UPDATE SET
+    name = EXCLUDED.name,
+    reward_points = EXCLUDED.reward_points,
+    priority = EXCLUDED.priority;
 
 -- Badges (3 rows: B-01..B-03 — Bronze 200, Silver 600, Gold 1000)
 INSERT INTO badges (badge_id, badge_name, threshold_points)
