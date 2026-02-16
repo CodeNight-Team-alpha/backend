@@ -15,4 +15,7 @@ public interface BadgeAwardRepository extends JpaRepository<BadgeAwardEntity, Ba
 
     @Query("SELECT e FROM BadgeAwardEntity e WHERE e.id.userId = :userId")
     List<BadgeAwardEntity> findById_UserId(@Param("userId") String userId);
+
+    @Query("SELECT e FROM BadgeAwardEntity e WHERE e.id.userId IN :userIds")
+    List<BadgeAwardEntity> findById_UserIdIn(@Param("userIds") List<String> userIds);
 }

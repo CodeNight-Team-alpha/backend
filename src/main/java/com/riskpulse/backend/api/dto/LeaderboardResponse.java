@@ -15,6 +15,10 @@ public record LeaderboardResponse(
             int rank,
             String userId,
             String displayName,
-            BigDecimal totalPoints
+            BigDecimal totalPoints,
+            List<BadgeInfo> badges
     ) {}
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public record BadgeInfo(String badgeId, String badgeName, Integer threshold) {}
 }
