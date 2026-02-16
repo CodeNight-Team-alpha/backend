@@ -1,4 +1,4 @@
-package com.riskpulse.backend.domain;
+package com.riskpulse.backend.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

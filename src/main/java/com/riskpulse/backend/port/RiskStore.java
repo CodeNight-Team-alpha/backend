@@ -1,6 +1,6 @@
 package com.riskpulse.backend.port;
 
-import com.riskpulse.backend.domain.RiskItem;
+import com.riskpulse.backend.domain.model.RiskItem;
 
 import java.util.List;
 

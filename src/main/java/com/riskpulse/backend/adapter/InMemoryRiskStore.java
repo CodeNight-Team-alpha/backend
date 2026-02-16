@@ -1,6 +1,6 @@
 package com.riskpulse.backend.adapter;
 
-import com.riskpulse.backend.domain.RiskItem;
+import com.riskpulse.backend.domain.model.RiskItem;
 import com.riskpulse.backend.port.RiskStore;
 import org.springframework.stereotype.Component;
 
